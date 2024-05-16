@@ -1,14 +1,12 @@
-import {
-  CssBaseline,
-  PaletteMode,
-  ThemeProvider,
-  createTheme,
-} from '@mui/material'
+import CssBaseline from '@mui/material/CssBaseline'
+import ThemeProvider from '@mui/material/styles/ThemeProvider'
+import createTheme from "@mui/material/styles/createTheme"
+import { PaletteMode } from '@mui/material'
 import { createContext, useEffect, useMemo, useState } from 'react'
 
 export const measurements = {
   navbarSize: 60,
-  navbarAdd: 200
+  navbarAdd: 200,
 }
 
 //palette options
@@ -22,22 +20,21 @@ const hexPalette = {
     dark: '#E4523E',
   },
   highlight: {
-    light: "#EFEFEF",
-    dark: "#383838"
+    light: '#EFEFEF',
+    dark: '#383838',
   },
   shadow: {
-    light: "#D0D0D0",
-    dark: "#1d1d1d",
+    light: '#D0D0D0',
+    dark: '#1d1d1d',
   },
   background: {
     light: {
       default: '#DDDDDD',
-      paper: '#DDDDDD'
+      paper: '#DDDDDD',
     },
     dark: {
       default: '#282828',
-      paper: '#282828'
-
+      paper: '#282828',
     },
   },
   text: {
@@ -54,7 +51,6 @@ const hexPalette = {
 
 //sets the color mode on the palette object and conditionally chooses the palette
 const getTheme = (mode: PaletteMode) => ({
-
   palette: {
     mode,
     ...(mode === 'light'
@@ -66,6 +62,8 @@ const getTheme = (mode: PaletteMode) => ({
           secondary: {
             main: hexPalette.secondary.light,
           },
+          highlight: hexPalette.highlight.light,
+          shadow: hexPalette.shadow.light,
           background: hexPalette.background.light,
           text: hexPalette.text.light,
         }
@@ -77,11 +75,13 @@ const getTheme = (mode: PaletteMode) => ({
           secondary: {
             main: hexPalette.secondary.dark,
           },
+          highlight: hexPalette.highlight.dark,
+          shadow: hexPalette.shadow.dark,
           background: hexPalette.background.dark,
           text: hexPalette.text.dark,
         }),
   },
-    components: {
+  components: {
     MuiButtonBase: {
       defaultProps: {
         focusRipple: true,
@@ -90,32 +90,37 @@ const getTheme = (mode: PaletteMode) => ({
     MuiButton: {
       variants: [
         {
-          props: { variant: 'tactile'},
+          props: { variant: 'tactile' },
           style: {
             boxShadow: `5px 5px 10px ${mode === 'light' ? hexPalette.shadow.light : hexPalette.shadow.dark},  -5px -5px 10px ${mode === 'light' ? hexPalette.highlight.light : hexPalette.highlight.dark}`,
             transition: '150ms ease-in-out',
             ' &:hover': {
-              backgroundColor: "none",
-              boxShadow: "none",
+              backgroundColor: 'none',
+              boxShadow: 'none',
               transition: '150ms ease-in-out',
             },
           },
         },
         {
-          props: { variant: 'tactile', color: "primary"},
+          props: { variant: 'tactile', color: 'primary' },
           style: {
-            color: mode === "light" ? hexPalette.primary.light : hexPalette.primary.dark,
+            color:
+              mode === 'light'
+                ? hexPalette.primary.light
+                : hexPalette.primary.dark,
           },
         },
         {
-          props: { variant: 'tactile', color: "secondary"},
+          props: { variant: 'tactile', color: 'secondary' },
           style: {
-            color: mode === "light" ? hexPalette.secondary.light : hexPalette.secondary.dark,
+            color:
+              mode === 'light'
+                ? hexPalette.secondary.light
+                : hexPalette.secondary.dark,
           },
         },
-      ]
-
-    }
+      ],
+    },
   },
 })
 
