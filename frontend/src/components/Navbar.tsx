@@ -5,6 +5,7 @@ import { useContext } from 'react'
 import { NavbarContext, NavbarContextProvider } from './NavbarProvider'
 import Button from '@mui/material/Button'
 import { measurements } from '../theme'
+import { NavDrawer } from './NavbarDrawer'
 
 interface NavbarProps extends DrawerProps {
   children: React.ReactNode
@@ -39,30 +40,13 @@ const ContentBox = styled(Box, {
         }),
 }))
 
-const NavDrawer = styled(Drawer)<DrawerProps>(({ theme, open }) => ({
-    '& .MuiPaper-root': {
-    width: measurements.navbarSize,
-    transition: theme.transitions.create('width', {
-        
-    }),
-  ...(open && {
-    width: measurements.navbarSize + measurements.navbarAdd,
-    transition: theme.transitions.create('width', {
-        
-    }),
-  }),
-}
-}))
 
 export const Navbar = ({ children }: NavbarProps) => {
   const { open, setOpen } = useContext(NavbarContext)
 
   return (
       <BrowserBox>
-        <NavDrawer
-          open={open}
-          variant="permanent"
-        >Content</NavDrawer>
+        <NavDrawer open={open} />
         <ContentBox open={open}>
             <Button onClick={() => setOpen(!open)} variant="tactile" color="primary" sx={{margin: 2}}>open</Button>
             {children}</ContentBox>

@@ -54,10 +54,37 @@ const hexPalette = {
 
 //sets the color mode on the palette object and conditionally chooses the palette
 const getTheme = (mode: PaletteMode) => ({
-  components: {
+
+  palette: {
+    mode,
+    ...(mode === 'light'
+      ? {
+          // palette values for light mode
+          primary: {
+            main: hexPalette.primary.light,
+          },
+          secondary: {
+            main: hexPalette.secondary.light,
+          },
+          background: hexPalette.background.light,
+          text: hexPalette.text.light,
+        }
+      : {
+          // palette values for light mode
+          primary: {
+            main: hexPalette.primary.dark,
+          },
+          secondary: {
+            main: hexPalette.secondary.dark,
+          },
+          background: hexPalette.background.dark,
+          text: hexPalette.text.dark,
+        }),
+  },
+    components: {
     MuiButtonBase: {
       defaultProps: {
-        focusRipple: true
+        focusRipple: true,
       },
     },
     MuiButton: {
@@ -89,32 +116,6 @@ const getTheme = (mode: PaletteMode) => ({
       ]
 
     }
-  },
-  palette: {
-    mode,
-    ...(mode === 'light'
-      ? {
-          // palette values for light mode
-          primary: {
-            main: hexPalette.primary.light,
-          },
-          secondary: {
-            main: hexPalette.secondary.light,
-          },
-          background: hexPalette.background.light,
-          text: hexPalette.text.light,
-        }
-      : {
-          // palette values for light mode
-          primary: {
-            main: hexPalette.primary.dark,
-          },
-          secondary: {
-            main: hexPalette.secondary.dark,
-          },
-          background: hexPalette.background.dark,
-          text: hexPalette.text.dark,
-        }),
   },
 })
 
@@ -152,6 +153,7 @@ export const JLThemeProvider = ({ children }: ThemeProvider) => {
     else localStorage.setItem(localStorageItem, mode)
   }, [])
 
+  //@ts-ignore
   const theme = useMemo(() => createTheme(getTheme(mode)), [mode])
 
   return (
