@@ -3,7 +3,7 @@ import { Navbar } from './components/Nav/Navbar'
 import { JLThemeProvider } from './theme'
 import { Outlet, Routes, Route } from 'react-router-dom'
 import { Paths } from './utils/paths'
-import { Timer } from './pages/Timer'
+import { Timer } from './pages/Timer/Timer'
 
 export const Portfolio = () => {
   return (
@@ -12,14 +12,14 @@ export const Portfolio = () => {
         path={Paths.ABSOLUTE_HOME}
         element={
           <JLThemeProvider>
-          <NavbarContextProvider>
+            <NavbarContextProvider>
               <Navbar>
                 <Outlet />
               </Navbar>
-          </NavbarContextProvider>
-        </JLThemeProvider>
+            </NavbarContextProvider>
+          </JLThemeProvider>
         }
-        >
+      >
         <Route path={Paths.RELATIVE_HOME} element={<></>} />
         <Route path={Paths.RELATIVE_TIMER} element={<Timer />} />
         {/* child routes go here */}

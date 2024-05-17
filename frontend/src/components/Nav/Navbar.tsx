@@ -23,8 +23,8 @@ const ContentBox = styled(Box, {
   shouldForwardProp: (prop) => prop !== 'open',
 })<ContentBox>(({ theme, open }) => ({
   width: `calc(100% - ${measurements.navbarSize}px)`,
-  paddingLeft: measurements.navbarSize, 
-  paddingTop: measurements.navbarSize, 
+  paddingLeft: measurements.navbarSize,
+  paddingTop: measurements.navbarSize,
   position: 'absolute',
   right: 0,
   transition: theme.transitions.create('width', {}),
@@ -41,9 +41,7 @@ export const Navbar = ({ children }: NavbarProps) => {
   return (
     <BrowserBox>
       <NavDrawer open={open} />
-      <ContentBox open={open}>
-        {children}
-      </ContentBox>
+      <ContentBox open={open}>{children}</ContentBox>
     </BrowserBox>
   )
 }

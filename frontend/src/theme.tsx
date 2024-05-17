@@ -1,6 +1,6 @@
 import CssBaseline from '@mui/material/CssBaseline'
 import ThemeProvider from '@mui/material/styles/ThemeProvider'
-import createTheme from "@mui/material/styles/createTheme"
+import createTheme from '@mui/material/styles/createTheme'
 import { PaletteMode } from '@mui/material'
 import { createContext, useEffect, useMemo, useState } from 'react'
 
