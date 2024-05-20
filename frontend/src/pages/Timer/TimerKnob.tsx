@@ -1,11 +1,20 @@
-import { Stack, styled } from '@mui/material'
 import AvTimerIcon from '@mui/icons-material/AvTimer'
-import { TactileIconButton } from '../../components/Common/TactileIconButton'
 import ClearIcon from '@mui/icons-material/Clear'
+import FingerprintIcon from '@mui/icons-material/Fingerprint'
+import { Stack, styled } from '@mui/material'
+import { RefObject, useEffect, useRef, useState } from 'react'
+import { TactileIconButton } from '../../components/Common/TactileIconButton'
 
 type TimerKnobProps = {
-  // timer: string
-  // setTimer: React.Dispatch<React.SetStateAction<string>>
+  timerDuration: number
+  setTimerDuration: React.Dispatch<React.SetStateAction<number>>
+  handleButton: () => void
+}
+
+type VerticeState = {
+  x: number
+  y: number
+  angle: number
 }
 
 const TimerKnobHousing = styled(Stack)(({ theme }) => ({
@@ -15,35 +24,99 @@ const TimerKnobHousing = styled(Stack)(({ theme }) => ({
   alignItems: 'center',
   borderRadius: '50%',
   boxShadow: `inset 5px 5px 10px ${theme.palette.shadow}, inset -5px -5px 10px ${theme.palette.highlight}`,
+  position: 'relative',
 }))
 
-export const TimerKnob = () =>
-  // { timer, setTimer }: TimerKnobProps
-  {
-    const isTimeZero = (time: string) => {
-      return time.split(':').some((num) => parseInt(num) > 0)
-    }
-    // const handleTimerClick = () => {
-    //   const isZero = isTimeZero(timer)
-    //   if (isZero) {
-    //   } else {
-    //     setTimer('')
-    //   }
-    // }
+const TimerHand = styled(FingerprintIcon)(({ theme }) => ({
+  height: 65,
+  width: 65,
+  position: 'absolute',
+  top: 30,
+  padding: 5,
+  left: `calc(50% - ${65 / 2}px)`,
+  cursor: 'move',
+  userSelect: 'none',
+  border: `3px solid ${theme.palette.primary.main}`,
+  borderRadius: '50%',
+  color: theme.palette.primary.main,
+}))
 
-    return (
-      <TimerKnobHousing>
-        <TactileIconButton
-          size="large"
-          color="primary"
-          // onClick={handleTimerClick}
-        >
-          {/* {isTimeZero(timer) ? ( */}
-          {/* <ClearIcon fontSize="large" /> */}
-          {/* ) : ( */}
-          <AvTimerIcon fontSize="large" />
-          {/* )} */}
-        </TactileIconButton>
-      </TimerKnobHousing>
-    )
+export const TimerKnob = ({
+  timerDuration,
+  setTimerDuration,
+  handleButton,
+}: TimerKnobProps) => {
+  const [isMouseDown, setIsMouseDown] = useState<boolean>(false)
+  const parentElement = useRef<RefObject<HTMLDivElement>>()
+  const childElement = useRef<RefObject<SVGSVGElement>>()
+  const [vertices, setVertices] = useState<VerticeState>({
+    x: 0,
+    y: 0,
+    angle: 0,
+  })
+
+  useEffect(() => {
+    console.log('useEffect')
+  })
+
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement> | undefined) => {
+    console.log('event', e)
+    console.log('childRef', childElement)
+    console.log('ParentRef', parentElement.current.getBoundingClientRect())
+
+    if (e) {
+      setIsMouseDown(true)
+      setVertices((prev) => ({
+        ...prev,
+        x: e.clientX - prev.x,
+        y: e.clientY - prev.y,
+      }))
+    }
   }
+
+  const handleMouseUp = (e: React.MouseEvent<HTMLDivElement> | undefined) => {
+    if (e) {
+      setIsMouseDown(false)
+      //determines the value of the timer based on the angle. 0 is nothing. 359 is 12 minutes.
+    }
+  }
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement> | undefined) => {
+    // sets the angle of rotation using the tangent of the default vertices and the current vertices.
+  }
+
+  return (
+    <TimerKnobHousing>
+      <div
+        ref={parentElement}
+        style={{
+          height: '100%',
+          width: '100%',
+          position: 'absolute',
+          transform: `rotate(${vertices.angle}deg)`,
+        }}
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
+        onMouseMove={handleMouseMove}
+        draggable={isMouseDown}
+      >
+        <TimerHand ref={childElement} />
+      </div>
+      <TactileIconButton
+        size="large"
+        color="primary"
+        onClick={handleButton}
+        sx={{
+          width: '65px',
+          height: '65px',
+        }}
+      >
+        {timerDuration === 0 ? (
+          <AvTimerIcon fontSize="large" />
+        ) : (
+          <ClearIcon fontSize="large" />
+        )}
+      </TactileIconButton>
+    </TimerKnobHousing>
+  )
+}

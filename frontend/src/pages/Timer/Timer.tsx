@@ -1,5 +1,5 @@
 import { Button, Stack, Typography } from '@mui/material'
-import { Reducer, useEffect, useReducer, useRef } from 'react'
+import { Reducer, useEffect, useReducer, useRef, useState } from 'react'
 import { TimerKnob } from './TimerKnob'
 import { TimerType } from './timerTypes'
 
@@ -49,7 +49,7 @@ const timerReducer = (
 export const Timer = () => {
   //Ref is the interval, allowing it to persist between renders
   const Ref = useRef<number | undefined>()
-
+  const [timerDuration, setTimerDuration] = useState<number>(0)
   const [newTimer, dispatch] = useReducer<Reducer<any, any>>(
     timerReducer,
     initialTimer,
@@ -59,35 +59,28 @@ export const Timer = () => {
     clearInterval(Ref.current)
   }, [])
 
+  const handleButton = () => {
+    if (Ref.current) {
+      dispatch({ type: TimerType.TimerActionEnum.RESET })
+      clearInterval(Ref.current)
+      Ref.current = undefined
+    } else {
+      const id = setInterval(() => {
+        dispatch({ type: TimerType.TimerActionEnum.START })
+      }, milliseconds)
+      Ref.current = id
+    }
+  }
+
   return (
     <Stack direction="column" alignItems="center" spacing={3}>
       <Typography variant="h2">Timer</Typography>
-      <TimerKnob />
+      <TimerKnob
+        timerDuration={timerDuration}
+        setTimerDuration={setTimerDuration}
+        handleButton={handleButton}
+      />
       <Typography variant="h2">{newTimer.timer}</Typography>
-      {Ref?.current ? (
-        <Button
-          variant="tactile"
-          onClick={() => {
-            dispatch({ type: TimerType.TimerActionEnum.RESET })
-            clearInterval(Ref.current)
-            Ref.current = undefined
-          }}
-        >
-          Reset
-        </Button>
-      ) : (
-        <Button
-          variant="tactile"
-          onClick={() => {
-            const id = setInterval(() => {
-              dispatch({ type: TimerType.TimerActionEnum.START })
-            }, milliseconds)
-            Ref.current = id
-          }}
-        >
-          Start
-        </Button>
-      )}
       <Button
         variant="tactile"
         onClick={() => {
