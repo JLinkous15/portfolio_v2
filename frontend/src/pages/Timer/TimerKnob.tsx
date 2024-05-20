@@ -2,7 +2,7 @@ import AvTimerIcon from '@mui/icons-material/AvTimer'
 import ClearIcon from '@mui/icons-material/Clear'
 import FingerprintIcon from '@mui/icons-material/Fingerprint'
 import { Stack, styled } from '@mui/material'
-import { RefObject, useEffect, useRef, useState } from 'react'
+import { RefObject, useRef, useState } from 'react'
 import { TactileIconButton } from '../../components/Common/TactileIconButton'
 
 type TimerKnobProps = {
@@ -53,10 +53,6 @@ export const TimerKnob = ({
     x: 0,
     y: 0,
     angle: 0,
-  })
-
-  useEffect(() => {
-    console.log('useEffect')
   })
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement> | undefined) => {

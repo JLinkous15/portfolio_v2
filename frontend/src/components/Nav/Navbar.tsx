@@ -22,13 +22,13 @@ const BrowserBox = styled(Box)({
 const ContentBox = styled(Box, {
   shouldForwardProp: (prop) => prop !== 'open',
 })<ContentBox>(({ theme, open }) => ({
-  width: `calc(100% - ${measurements.navbarSize}px)`,
+  width: `100%`,
   paddingLeft: measurements.navbarSize,
   paddingTop: measurements.navbarSize,
+  paddingRight: measurements.navbarSize,
   position: 'absolute',
   right: 0,
   transition: theme.transitions.create('width', {}),
-
   ...(open && {
     width: `calc(100% - ${measurements.navbarSize + measurements.navbarAdd}px)`,
     transition: theme.transitions.create('width', {}),

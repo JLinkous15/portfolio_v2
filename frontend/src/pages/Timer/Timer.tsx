@@ -74,7 +74,7 @@ export const Timer = () => {
 
   return (
     <Stack direction="column" alignItems="center" spacing={3}>
-      <Typography variant="h2">Timer</Typography>
+      <Typography variant="h2">Egg Timer</Typography>
       <TimerKnob
         timerDuration={timerDuration}
         setTimerDuration={setTimerDuration}
