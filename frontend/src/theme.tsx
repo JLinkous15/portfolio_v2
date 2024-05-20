@@ -1,6 +1,6 @@
 import CssBaseline from '@mui/material/CssBaseline'
 import ThemeProvider from '@mui/material/styles/ThemeProvider'
-import createTheme from '@mui/material/styles/createTheme'
+import createTheme, { Theme } from '@mui/material/styles/createTheme'
 import { PaletteMode } from '@mui/material'
 import { createContext, useEffect, useMemo, useState } from 'react'
 
@@ -121,6 +121,15 @@ const getTheme = (mode: PaletteMode) => ({
         },
       ],
     },
+  },
+  typography: {
+    fontFamily: ['Montserrat', 'Roboto', 'sans-serif'].join(','),
+    // h1: {
+    //   fontSize: '16px',
+    //   fontWeight: 500,
+    //   fontSpacing: '10px',
+    //   fontFamily: 'Montserrat',
+    // },
   },
 })
 

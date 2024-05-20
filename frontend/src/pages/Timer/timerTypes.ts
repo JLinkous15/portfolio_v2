@@ -1,3 +1,5 @@
+import React from "react"
+
 export namespace TimerType {
   export enum TimerActionEnum {
     SET = 'Set',
@@ -6,23 +8,15 @@ export namespace TimerType {
     RESET = 'Reset',
   }
 
-  export type InitialTimeState = {
-    startTime: number
-    passedTime: number
-    pausedTime: number
-    totalTime: number
-  }
-
   export type TimerReducerAction = {
     type: TimerActionEnum
+    value?: number
+    ref?: React.MutableRefObject<number | undefined>
   }
 
-  export type TimerString = {
-    time: `${number}${number}:${number}${number}`
-  }
-
-  export type TimerResponse = {
-    time: TimerString
-    timerDispatch: React.Dispatch<TimerType.TimerReducerAction>
+  export type TimeState = {
+    duration: number
+    pausedTime: number
+    timer: string
   }
 }

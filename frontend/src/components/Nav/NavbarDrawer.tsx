@@ -89,7 +89,11 @@ export const NavDrawer = (props: NavDrawerProps) => {
           </Tooltip>
         ) : (
           <Tooltip title="Close">
-            <IconButton aria-label="menu-button" onClick={handleClose}>
+            <IconButton
+              aria-label="menu-button"
+              color="primary"
+              onClick={handleClose}
+            >
               <CloseIcon />
             </IconButton>
           </Tooltip>
@@ -98,7 +102,10 @@ export const NavDrawer = (props: NavDrawerProps) => {
       <List>
         {navigationLinks.map((nav, index) => (
           <ListItem key={index} disableGutters>
-            <IconButton onClick={() => navigate(nav.path)}>
+            <IconButton
+              onClick={() => navigate(nav.path)}
+              sx={!open ? { width: '100%' } : {}}
+            >
               {nav.icon}
             </IconButton>
             {open && <Typography variant="body1">{nav.title}</Typography>}
