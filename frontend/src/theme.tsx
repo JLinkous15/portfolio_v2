@@ -40,10 +40,12 @@ const hexPalette = {
   text: {
     light: {
       primary: '#000000',
+      secondary: '#ffffff',
       disabled: '#00000050',
     },
     dark: {
       primary: '#ffffff',
+      secondary: '#000000',
       disabled: '#ffffff50',
     },
   },
@@ -141,7 +143,7 @@ type ColorModeContextType = {
   toggleColorMode: () => void
 }
 
-const ColorModeContext = createContext<ColorModeContextType>(
+export const ColorModeContext = createContext<ColorModeContextType>(
   {} as ColorModeContextType,
 )
 

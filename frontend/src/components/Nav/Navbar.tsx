@@ -22,7 +22,8 @@ const BrowserBox = styled(Box)({
 const ContentBox = styled(Box, {
   shouldForwardProp: (prop) => prop !== 'open',
 })<ContentBox>(({ theme, open }) => ({
-  width: `100%`,
+  width: '100%',
+  minWidth: '500px',
   paddingLeft: measurements.navbarSize,
   paddingTop: measurements.navbarSize,
   paddingRight: measurements.navbarSize,

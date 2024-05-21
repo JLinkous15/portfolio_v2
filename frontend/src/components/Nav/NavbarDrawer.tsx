@@ -2,7 +2,7 @@ import Box, { BoxProps } from '@mui/material/Box'
 import Drawer, { DrawerProps } from '@mui/material/Drawer'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import { styled } from '@mui/material/styles'
+import { styled, useTheme } from '@mui/material/styles'
 import { measurements } from '../../theme'
 import MenuIcon from '@mui/icons-material/Menu'
 import CloseIcon from '@mui/icons-material/Close'
@@ -13,22 +13,37 @@ import LocalBarIcon from '@mui/icons-material/LocalBar'
 import CalculateIcon from '@mui/icons-material/Calculate'
 import EggIcon from '@mui/icons-material/Egg'
 import { Paths } from '../../utils/paths'
-import { List, ListItem, Typography } from '@mui/material'
+import {
+  AppBar,
+  AppBarProps,
+  List,
+  ListItem,
+  Stack,
+  Typography,
+  useMediaQuery,
+} from '@mui/material'
 import { useNavigate } from 'react-router-dom'
+import { ColorModeSwitch } from '../Common/ColorModeSwitch'
 
 interface NavDrawerProps extends DrawerProps {}
 interface StyledBoxProps extends BoxProps {
   open: boolean
 }
+interface StyledAppBar extends AppBarProps {
+  open: boolean
+}
 
 const StyledDrawer = styled(Drawer)<DrawerProps>(({ theme, open }) => ({
   '& .MuiPaper-root': {
+    height: '100vh',
     width: measurements.navbarSize,
+    overflow: "hidden",
     transition: theme.transitions.create('width', {}),
     ...(open && {
       width: measurements.navbarSize + measurements.navbarAdd,
       transition: theme.transitions.create('width', {}),
     }),
+
   },
 }))
 
@@ -44,9 +59,21 @@ const StyledHeader = styled(Box, {
   }),
 }))
 
+const StyledAppBar = styled(AppBar, {
+  shouldForwardProp: (props) => props !== 'open',
+})<StyledAppBar>(({ theme, open }) => ({
+  '& .MuiPaper-root': {
+    backgroundColor: theme.palette.background.default,
+    height: measurements.navbarSize,
+    transition: theme.transitions.create('width', {}),
+  }
+}))
+
 export const NavDrawer = (props: NavDrawerProps) => {
   const { open, setOpen } = useContext(NavbarContext)
   const navigate = useNavigate()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
@@ -75,43 +102,74 @@ export const NavDrawer = (props: NavDrawerProps) => {
   ]
 
   return (
-    <StyledDrawer {...props} variant="permanent">
-      <StyledHeader open={open}>
-        {!open ? (
-          <Tooltip title="Menu">
-            <IconButton
-              aria-label="menu-button"
-              color="primary"
-              onClick={handleOpen}
-            >
-              <MenuIcon />
-            </IconButton>
-          </Tooltip>
-        ) : (
-          <Tooltip title="Close">
-            <IconButton
-              aria-label="menu-button"
-              color="primary"
-              onClick={handleClose}
-            >
-              <CloseIcon />
-            </IconButton>
-          </Tooltip>
-        )}
-      </StyledHeader>
-      <List>
-        {navigationLinks.map((nav, index) => (
-          <ListItem key={index} disableGutters>
-            <IconButton
-              onClick={() => navigate(nav.path)}
-              sx={!open ? { width: '100%' } : {}}
-            >
-              {nav.icon}
-            </IconButton>
-            {open && <Typography variant="body1">{nav.title}</Typography>}
-          </ListItem>
-        ))}
-      </List>
-    </StyledDrawer>
+    <>
+      {!isMobile ? (
+        <StyledDrawer {...props} variant="permanent">
+          <StyledHeader open={open}>
+            {!open ? (
+              <Tooltip title="Menu">
+                <IconButton
+                  aria-label="menu-button"
+                  color="primary"
+                  onClick={handleOpen}
+                >
+                  <MenuIcon />
+                </IconButton>
+              </Tooltip>
+            ) : (
+              <Tooltip title="Close">
+                <IconButton
+                  aria-label="menu-button"
+                  color="primary"
+                  onClick={handleClose}
+                >
+                  <CloseIcon />
+                </IconButton>
+              </Tooltip>
+            )}
+          </StyledHeader>
+          <List>
+            {navigationLinks.map((nav, index) => (
+              <ListItem key={index} disableGutters>
+                <IconButton
+                  onClick={() => navigate(nav.path)}
+                  sx={!open ? { width: '100%' } : {}}
+                >
+                  {nav.icon}
+                </IconButton>
+                {open && <Typography variant="body1">{nav.title}</Typography>}
+              </ListItem>
+            ))}
+          </List>
+          <ColorModeSwitch sx={{position: "absolute", bottom: 10, left: 10}} />
+        </StyledDrawer>
+      ) : isMobile && (
+        <StyledAppBar open={open}>
+          <StyledHeader open={open}>
+            {!open ? (
+              <Tooltip title="Menu">
+                <IconButton
+                  aria-label="menu-button"
+                  onClick={handleOpen}
+                  sx={{color: theme.palette.text.secondary}}
+                >
+                  <MenuIcon />
+                </IconButton>
+              </Tooltip>
+            ) : (
+              <Tooltip title="Close">
+                <IconButton
+                  aria-label="menu-button"
+                  onClick={handleClose}
+                  sx={{color: theme.palette.text.secondary}}
+                >
+                  <CloseIcon />
+                </IconButton>
+              </Tooltip>
+            )}
+          </StyledHeader>
+        </StyledAppBar>
+      )}
+    </>
   )
 }

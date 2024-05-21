@@ -1,5 +1,5 @@
 import { Button, Stack, Typography } from '@mui/material'
-import { Reducer, useEffect, useReducer, useRef, useState } from 'react'
+import { Reducer, useEffect, useReducer, useRef } from 'react'
 import { TimerKnob } from './TimerKnob'
 import { TimerType } from './timerTypes'
 
@@ -49,12 +49,13 @@ const timerReducer = (
 export const Timer = () => {
   //Ref is the interval, allowing it to persist between renders
   const Ref = useRef<number | undefined>()
-  const [timerDuration, setTimerDuration] = useState<number>(0)
+  // const [timerDuration, setTimerDuration] = useState<number>(0)
   const [newTimer, dispatch] = useReducer<Reducer<any, any>>(
     timerReducer,
     initialTimer,
   )
 
+  const setTimerDuration = (newTime: number) => dispatch({ type: TimerType.TimerActionEnum.SET, value: newTime })
   useEffect(() => {
     clearInterval(Ref.current)
   }, [])
@@ -76,7 +77,7 @@ export const Timer = () => {
     <Stack direction="column" alignItems="center" spacing={3}>
       <Typography variant="h2">Egg Timer</Typography>
       <TimerKnob
-        timerDuration={timerDuration}
+        timerDuration={initialTimer.duration}
         setTimerDuration={setTimerDuration}
         handleButton={handleButton}
       />
