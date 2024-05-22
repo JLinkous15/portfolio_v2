@@ -37,13 +37,12 @@ const StyledDrawer = styled(Drawer)<DrawerProps>(({ theme, open }) => ({
   '& .MuiPaper-root': {
     height: '100vh',
     width: measurements.navbarSize,
-    overflow: "hidden",
+    overflow: 'hidden',
     transition: theme.transitions.create('width', {}),
     ...(open && {
       width: measurements.navbarSize + measurements.navbarAdd,
       transition: theme.transitions.create('width', {}),
     }),
-
   },
 }))
 
@@ -66,7 +65,7 @@ const StyledAppBar = styled(AppBar, {
     backgroundColor: theme.palette.background.default,
     height: measurements.navbarSize,
     transition: theme.transitions.create('width', {}),
-  }
+  },
 }))
 
 export const NavDrawer = (props: NavDrawerProps) => {
@@ -141,34 +140,38 @@ export const NavDrawer = (props: NavDrawerProps) => {
               </ListItem>
             ))}
           </List>
-          <ColorModeSwitch sx={{position: "absolute", bottom: 10, left: 10}} />
+          <ColorModeSwitch
+            sx={{ position: 'absolute', bottom: 10, left: 10 }}
+          />
         </StyledDrawer>
-      ) : isMobile && (
-        <StyledAppBar open={open}>
-          <StyledHeader open={open}>
-            {!open ? (
-              <Tooltip title="Menu">
-                <IconButton
-                  aria-label="menu-button"
-                  onClick={handleOpen}
-                  sx={{color: theme.palette.text.secondary}}
-                >
-                  <MenuIcon />
-                </IconButton>
-              </Tooltip>
-            ) : (
-              <Tooltip title="Close">
-                <IconButton
-                  aria-label="menu-button"
-                  onClick={handleClose}
-                  sx={{color: theme.palette.text.secondary}}
-                >
-                  <CloseIcon />
-                </IconButton>
-              </Tooltip>
-            )}
-          </StyledHeader>
-        </StyledAppBar>
+      ) : (
+        isMobile && (
+          <StyledAppBar open={open}>
+            <StyledHeader open={open}>
+              {!open ? (
+                <Tooltip title="Menu">
+                  <IconButton
+                    aria-label="menu-button"
+                    onClick={handleOpen}
+                    sx={{ color: theme.palette.text.secondary }}
+                  >
+                    <MenuIcon />
+                  </IconButton>
+                </Tooltip>
+              ) : (
+                <Tooltip title="Close">
+                  <IconButton
+                    aria-label="menu-button"
+                    onClick={handleClose}
+                    sx={{ color: theme.palette.text.secondary }}
+                  >
+                    <CloseIcon />
+                  </IconButton>
+                </Tooltip>
+              )}
+            </StyledHeader>
+          </StyledAppBar>
+        )
       )}
     </>
   )

@@ -125,7 +125,7 @@ const getTheme = (mode: PaletteMode) => ({
     },
   },
   typography: {
-    fontFamily: ['Montserrat', 'Roboto', 'sans-serif'].join(','),
+    fontFamily: ['Montserrat', 'Space Mono', 'sans-serif'].join(','),
     // h1: {
     //   fontSize: '16px',
     //   fontWeight: 500,

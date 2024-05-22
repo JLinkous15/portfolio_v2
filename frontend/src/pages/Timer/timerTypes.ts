@@ -1,22 +1,33 @@
-import React from 'react'
-
 export namespace TimerType {
   export enum TimerActionEnum {
     SET = 'Set',
     START = 'Start',
-    PAUSE = 'Pause',
+    SET_ANGLE = 'Set Angle',
     RESET = 'Reset',
   }
 
-  export type TimerReducerAction = {
-    type: TimerActionEnum
-    value?: number
-    ref?: React.MutableRefObject<number | undefined>
+  export enum TimerEnum {
+    EGG = 'egg',
+    STEAK = 'steak',
   }
+
+  export type TimerReducerAction = any
 
   export type TimeState = {
     duration: number
-    pausedTime: number
     timer: string
+    relativeAngle: number
+  }
+
+  export type TimeTypePreset = {
+    label: string
+    duration: number
+  }
+
+  export type TimeTypeEntry = {
+    label: string
+    angleMultiplier: number
+    presets: TimeTypePreset[]
+    body: string
   }
 }

@@ -24,7 +24,7 @@ const ContentBox = styled(Box, {
 })<ContentBox>(({ theme, open }) => ({
   width: '100%',
   minWidth: '500px',
-  paddingLeft: measurements.navbarSize,
+  paddingLeft: measurements.navbarSize * 2,
   paddingTop: measurements.navbarSize,
   paddingRight: measurements.navbarSize,
   position: 'absolute',

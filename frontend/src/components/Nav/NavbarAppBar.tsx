@@ -1,5 +1,3 @@
 export const NavbarAppBar = () => {
-  return (
-    <></>
-  )
+  return <></>
 }
