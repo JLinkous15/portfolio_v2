@@ -112,9 +112,6 @@ export const TimerKnob = ({
         dy: verticesCopy.dy - e.clientY,
       }
       const angle = getAngle(handElement.current)
-      console.log(angle)
-      console.log(timer.totalTime)
-      // setVertices((prev) => ({ ...prev, angle }))
       const newValue = {
         duration: timer.totalTime * (angle / 360),
         totalTime: timer.totalTime,

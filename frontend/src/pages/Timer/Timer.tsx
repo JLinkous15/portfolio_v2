@@ -131,6 +131,13 @@ export const Timer = () => {
     initialTimer,
   )
 
+  if (newTimer.duration <= 1000){
+    clearInterval(TimerIntervalRef.current)
+    TimerIntervalRef.current = undefined
+  }
+
+  console.log(TimerIntervalRef.current)
+
   const setTimerDrag = (newTime: {
     duration: number,
     totalTime: number,
@@ -143,16 +150,14 @@ export const Timer = () => {
   }, [])
 
   const handleButton = () => {
-    if (TimerIntervalRef.current || newTimer.duration === 0) {
+    if (TimerIntervalRef.current) {
       dispatch({ type: TimerType.TimerActionEnum.RESET })
       clearInterval(TimerIntervalRef.current)
       TimerIntervalRef.current = undefined
-    } else if (newTimer.duration === 0) {
-      dispatch({type: TimerType.TimerActionEnum.RESET})
     } else {
       dispatch({type: TimerType.TimerActionEnum.OPTIMISTIC_START})
       const id = setInterval(() => {
-        dispatch({ type: TimerType.TimerActionEnum.START })
+          dispatch({ type: TimerType.TimerActionEnum.START })
       }, milliseconds)
       TimerIntervalRef.current = id
     }
