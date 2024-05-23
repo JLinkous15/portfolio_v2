@@ -1,9 +1,9 @@
 export namespace TimerType {
   export enum TimerActionEnum {
-    SET = 'Set',
-    START = 'Start',
-    SET_ANGLE = 'Set Angle',
-    RESET = 'Reset',
+    SET = 'set',
+    START = 'start',
+    RESET = 'reset',
+    OPTIMISTIC_START = 'optimistic start'
   }
 
   export enum TimerEnum {
@@ -14,9 +14,11 @@ export namespace TimerType {
   export type TimerReducerAction = any
 
   export type TimeState = {
+    totalTime: number
     duration: number
     timer: string
     relativeAngle: number
+    isCounting: boolean
   }
 
   export type TimeTypePreset = {
@@ -26,7 +28,7 @@ export namespace TimerType {
 
   export type TimeTypeEntry = {
     label: string
-    angleMultiplier: number
+    maxTime: number
     presets: TimeTypePreset[]
     body: string
   }

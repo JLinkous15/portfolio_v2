@@ -1,10 +1,19 @@
 import { DrawerProps } from '@mui/material/Drawer'
-import { styled } from '@mui/material/styles'
-import { useContext } from 'react'
+import { styled, useTheme } from '@mui/material/styles'
+import { useContext, useEffect } from 'react'
 import { measurements } from '../../theme'
 import { NavDrawer } from './NavbarDrawer'
 import { NavbarContext } from './NavbarProvider'
 import Box, { BoxProps } from '@mui/material/Box'
+import useMediaQuery from '@mui/material/useMediaQuery'
+import { NavbarAppBar } from './NavbarAppBar'
+import { Paths } from '../../utils/paths'
+import LunchDiningIcon from '@mui/icons-material/LunchDining'
+import LocalBarIcon from '@mui/icons-material/LocalBar'
+import CalculateIcon from '@mui/icons-material/Calculate'
+import EggIcon from '@mui/icons-material/Egg'
+import HomeIcon from '@mui/icons-material/Home'
+import { useNavigate } from 'react-router-dom'
 
 interface NavbarProps extends DrawerProps {
   children: React.ReactNode
@@ -13,6 +22,12 @@ interface NavbarProps extends DrawerProps {
 interface ContentBox extends BoxProps {
   open: boolean
 }
+
+export type NavLinkType = {
+  title: string
+  onClick: () => void
+  icon: React.ReactElement<any, any>
+}[]
 
 const BrowserBox = styled(Box)({
   minHeight: '100dvh',
@@ -30,6 +45,9 @@ const ContentBox = styled(Box, {
   position: 'absolute',
   right: 0,
   transition: theme.transitions.create('width', {}),
+  [theme.breakpoints.down('sm')]: {
+    paddingLeft: measurements.navbarSize,
+  },
   ...(open && {
     width: `calc(100% - ${measurements.navbarSize + measurements.navbarAdd}px)`,
     transition: theme.transitions.create('width', {}),
@@ -37,11 +55,51 @@ const ContentBox = styled(Box, {
 }))
 
 export const Navbar = ({ children }: NavbarProps) => {
-  const { open } = useContext(NavbarContext)
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  const isUltrawide = useMediaQuery(theme.breakpoints.up('xl'))
+  const { open, setOpen } = useContext(NavbarContext)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (isUltrawide) setOpen(true)
+  }, [isUltrawide])
+
+  const navigationLinks: NavLinkType = [
+    {
+      title: 'Home',
+      onClick: () => navigate(Paths.ABSOLUTE_HOME),
+      icon: <HomeIcon color="primary" />,
+    },
+    {
+      title: 'Food',
+      onClick: () => navigate(Paths.ABSOLUTE_FOOD),
+      icon: <LunchDiningIcon color="primary" />,
+    },
+    {
+      title: 'Beverage',
+      onClick: () => navigate(Paths.ABSOLUTE_BEV),
+      icon: <LocalBarIcon color="primary" />,
+    },
+    {
+      title: 'Egg Timer',
+      onClick: () => navigate(Paths.ABSOLUTE_TIMER),
+      icon: <EggIcon color="primary" />,
+    },
+    {
+      title: 'Food Calculators',
+      onClick: () => navigate(Paths.ABSOLUTE_CALC),
+      icon: <CalculateIcon color="primary" />,
+    },
+  ]
 
   return (
     <BrowserBox>
-      <NavDrawer open={open} />
+      {!isMobile ? (
+        <NavDrawer navLinks={navigationLinks} />
+      ) : (
+        <NavbarAppBar navLinks={navigationLinks} />
+      )}
       <ContentBox open={open}>{children}</ContentBox>
     </BrowserBox>
   )

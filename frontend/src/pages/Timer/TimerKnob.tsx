@@ -2,16 +2,20 @@ import AvTimerIcon from '@mui/icons-material/AvTimer'
 import ClearIcon from '@mui/icons-material/Clear'
 import FingerprintIcon from '@mui/icons-material/Fingerprint'
 import { Stack, styled } from '@mui/material'
-import { MutableRefObject, RefObject, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { TactileIconButton } from '../../components/Common/TactileIconButton'
+import { TimerType } from './timerTypes'
 
 //Local parameterized measures to be used for rendering. Able to be reassigned programmatically
 let knobHandSize = 65
 let knobSize = 320
 
 type TimerKnobProps = {
-  timerDuration: number
-  setTimerDuration: (newTime: number) => void
+  timer: TimerType.TimeState
+  setTimerDrag: (newTime: {
+    duration: number,
+    totalTime: number
+  }) => void
   handleButton: () => void
 }
 
@@ -69,8 +73,8 @@ const getAngle = (point: Vertice) => {
 }
 
 export const TimerKnob = ({
-  timerDuration,
-  setTimerDuration,
+  timer,
+  setTimerDrag,
   handleButton,
 }: TimerKnobProps) => {
   const [isMouseDown, setIsMouseDown] = useState<boolean>(false)
@@ -108,10 +112,15 @@ export const TimerKnob = ({
         dy: verticesCopy.dy - e.clientY,
       }
       const angle = getAngle(handElement.current)
-      setVertices((prev) => ({ ...prev, angle }))
-      const eggMultiplier = 2000
-      const time = angle * eggMultiplier
-      setTimerDuration(time)
+      console.log(angle)
+      console.log(timer.totalTime)
+      // setVertices((prev) => ({ ...prev, angle }))
+      const newValue = {
+        duration: timer.totalTime * (angle / 360),
+        totalTime: timer.totalTime,
+        relativeAngle: angle
+      }
+      setTimerDrag(newValue)
     }
   }
 
@@ -129,13 +138,13 @@ export const TimerKnob = ({
           height: '100%',
           width: '100%',
           position: 'absolute',
-          transform: `rotate(${vertices.angle}deg)`,
+          transform: `rotate(${timer.relativeAngle}deg)`,
         }}
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
         onMouseMove={handleMouseMove}
       >
-        <TimerHand sx={{ transform: `rotate(-${vertices.angle}deg)` }} />
+        <TimerHand sx={{ transform: `rotate(-${timer.relativeAngle}deg)` }} />
         <TimerHandLine />
       </div>
       <TactileIconButton
@@ -147,7 +156,7 @@ export const TimerKnob = ({
           height: `${knobHandSize}px`,
         }}
       >
-        {timerDuration === 0 ? (
+        {!timer.isCounting ? (
           <AvTimerIcon fontSize="large" />
         ) : (
           <ClearIcon fontSize="large" />

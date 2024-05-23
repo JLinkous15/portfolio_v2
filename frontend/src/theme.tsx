@@ -1,12 +1,12 @@
 import CssBaseline from '@mui/material/CssBaseline'
 import ThemeProvider from '@mui/material/styles/ThemeProvider'
-import createTheme, { Theme } from '@mui/material/styles/createTheme'
-import { PaletteMode } from '@mui/material'
+import createTheme from '@mui/material/styles/createTheme'
+import { PaletteMode, alpha } from '@mui/material'
 import { createContext, useEffect, useMemo, useState } from 'react'
 
 export const measurements = {
   navbarSize: 60,
-  navbarAdd: 200,
+  navbarAdd: 130,
 }
 
 //palette options
@@ -84,6 +84,18 @@ const getTheme = (mode: PaletteMode) => ({
         }),
   },
   components: {
+    MuiAppBar: {
+      styleOverrides: {
+        colorPrimary: {
+          backgroundColor:
+            mode === 'light'
+              ? hexPalette.background.light.default
+              : hexPalette.background.dark.default,
+          boxShadow: 'none',
+          borderBottom: `1px solid ${mode === 'light' ? alpha(hexPalette.text.light.primary, 0.12) : alpha(hexPalette.text.dark.primary, 0.12)}`,
+        },
+      },
+    },
     MuiButtonBase: {
       defaultProps: {
         focusRipple: true,

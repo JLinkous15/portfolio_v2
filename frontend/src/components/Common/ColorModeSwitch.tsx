@@ -1,11 +1,12 @@
 import LightModeIcon from '@mui/icons-material/LightMode'
 import ModeNightIcon from '@mui/icons-material/ModeNight'
-import { IconButton, Menu, useTheme } from '@mui/material'
+import IconButton from '@mui/material/IconButton'
+import Menu from '@mui/material/Menu'
+import { useTheme } from '@mui/material/styles'
 import Stack, { StackProps } from '@mui/material/Stack'
 import Switch from '@mui/material/Switch'
 import { useContext, useState } from 'react'
 import { ColorModeContext } from '../../theme'
-import { TactileIconButton } from './TactileIconButton'
 import Brightness4Icon from '@mui/icons-material/Brightness4'
 
 interface ColorModeSwitchProps extends StackProps {}

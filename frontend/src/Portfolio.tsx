@@ -22,6 +22,9 @@ export const Portfolio = () => {
       >
         <Route path={Paths.RELATIVE_HOME} element={<></>} />
         <Route path={Paths.RELATIVE_TIMER} element={<Timer />} />
+        <Route path={Paths.RELATIVE_FOOD} element={<></>} />
+        <Route path={Paths.RELATIVE_BEV} element={<></>} />
+        <Route path={Paths.RELATIVE_CALC} element={<></>} />
         {/* child routes go here */}
       </Route>
     </Routes>

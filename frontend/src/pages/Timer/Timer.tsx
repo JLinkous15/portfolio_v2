@@ -1,4 +1,4 @@
-import { MenuItem, Stack, TextField, Typography } from '@mui/material'
+import { MenuItem, Stack, TextField, Typography, useTheme } from '@mui/material'
 import { Reducer, useEffect, useReducer, useRef, useState } from 'react'
 import { TimerKnob } from './TimerKnob'
 import { TimerType } from './timerTypes'
@@ -6,11 +6,11 @@ import { TimerType } from './timerTypes'
 const timerValues: Record<TimerType.TimerEnum, TimerType.TimeTypeEntry> = {
   egg: {
     label: 'Egg Timer',
-    angleMultiplier: 2000,
+    maxTime: 720000,
     presets: [
       {
         label: 'Soft Boiled',
-        duration: 363000,
+        duration: 390000,
       },
       {
         label: 'Jammy',
@@ -18,7 +18,7 @@ const timerValues: Record<TimerType.TimerEnum, TimerType.TimeTypeEntry> = {
       },
       {
         label: 'Hard Boiled - Translucent',
-        duration: 543000,
+        duration: 570000,
       },
       {
         label: 'Hard Boiled - Opaque',
@@ -29,7 +29,7 @@ const timerValues: Record<TimerType.TimerEnum, TimerType.TimeTypeEntry> = {
   },
   steak: {
     label: 'Pan-Seared Steak Timer',
-    angleMultiplier: 2333,
+    maxTime: 840000,
     presets: [
       {
         label: 'Rare',
@@ -45,7 +45,7 @@ const timerValues: Record<TimerType.TimerEnum, TimerType.TimeTypeEntry> = {
       },
       {
         label: 'Medium Well',
-        duration: 840000,
+        duration: 720000,
       },
       {
         label: 'Well',
@@ -57,9 +57,23 @@ const timerValues: Record<TimerType.TimerEnum, TimerType.TimeTypeEntry> = {
 }
 
 const initialTimer: TimerType.TimeState = {
+  totalTime: 600000,
   duration: 0,
   timer: '00:00',
   relativeAngle: 0,
+  isCounting: false
+}
+
+const initialTimerType: TimerType.TimeTypeEntry = {
+  label: '',
+  maxTime: 0,
+  presets: [],
+  body: '',
+}
+
+const initialTimerPreset: TimerType.TimeTypePreset = {
+  label: "",
+  duration: 0
 }
 
 const milliseconds = 1000
@@ -82,20 +96,25 @@ const timerReducer = (
   switch (action.type) {
     case TimerType.TimerActionEnum.SET:
       if (action.value) {
+        const {duration, totalTime} = action.value
         return {
           ...state,
-          duration: action.value,
-          timer: timeParser(action.value),
+          relativeAngle: 360 * (duration / totalTime),
+          totalTime: totalTime,
+          duration: duration,
+          isCounting: false,
+          timer: timeParser(duration),
         }
       }
       return state
     case TimerType.TimerActionEnum.RESET:
       return initialTimer
+    case TimerType.TimerActionEnum.OPTIMISTIC_START:
+      return {...state, isCounting: true}
     case TimerType.TimerActionEnum.START:
       const newDuration = state.duration - milliseconds
-      return { ...state, duration: newDuration, timer: timeParser(newDuration) }
-    case TimerType.TimerActionEnum.SET_ANGLE:
-      return state
+      const newAngle = (newDuration * 360 / state.totalTime)
+      return { ...state, duration: newDuration, relativeAngle: newAngle, timer: timeParser(newDuration), isCounting: true }
     default:
       return state
   }
@@ -104,29 +123,34 @@ const timerReducer = (
 export const Timer = () => {
   //Ref is the interval, allowing it to persist between renders
   const TimerIntervalRef = useRef<number | undefined>()
-  const [timerType, setTimerType] = useState<TimerType.TimeTypeEntry>({
-    label: '',
-    angleMultiplier: 0,
-    presets: [],
-    body: '',
-  })
+  const theme = useTheme()
+  const [timerPreset, setTimerPreset] = useState<TimerType.TimeTypePreset>(initialTimerPreset)
+  const [timerType, setTimerType] = useState<TimerType.TimeTypeEntry>(initialTimerType)
   const [newTimer, dispatch] = useReducer<Reducer<any, any>>(
     timerReducer,
     initialTimer,
   )
 
-  const setTimerDuration = (newTime: number) =>
+  const setTimerDrag = (newTime: {
+    duration: number,
+    totalTime: number,
+  }) => {
     dispatch({ type: TimerType.TimerActionEnum.SET, value: newTime })
+  }
+
   useEffect(() => {
     clearInterval(TimerIntervalRef.current)
   }, [])
 
   const handleButton = () => {
-    if (TimerIntervalRef.current) {
+    if (TimerIntervalRef.current || newTimer.duration === 0) {
       dispatch({ type: TimerType.TimerActionEnum.RESET })
       clearInterval(TimerIntervalRef.current)
       TimerIntervalRef.current = undefined
+    } else if (newTimer.duration === 0) {
+      dispatch({type: TimerType.TimerActionEnum.RESET})
     } else {
+      dispatch({type: TimerType.TimerActionEnum.OPTIMISTIC_START})
       const id = setInterval(() => {
         dispatch({ type: TimerType.TimerActionEnum.START })
       }, milliseconds)
@@ -137,12 +161,34 @@ export const Timer = () => {
   const handleTimerSelect = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
+    if (TimerIntervalRef || newTimer.duration > 0) {
+      dispatch({ type: TimerType.TimerActionEnum.RESET})
+    }
     const chosenTimer = Object.values(timerValues).find(
       (timer) => timer.label === event.target.value,
     )
-    if (chosenTimer) setTimerType(chosenTimer)
+    if (chosenTimer) {
+      if (TimerIntervalRef) clearInterval(TimerIntervalRef.current)
+      setTimerPreset(initialTimerPreset)
+      setTimerType(chosenTimer)
+    }
   }
-  const handleTimerPresetSelect = () => {}
+  const handleTimerPresetSelect = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | undefined) => {
+    if (TimerIntervalRef) clearInterval(TimerIntervalRef.current)
+    if (event) {
+      const timerLabel = event.target.value
+      const newTimePreset = timerType.presets.find(timer => timer.label === timerLabel)
+      if(newTimePreset) {
+        const value = {
+          duration: newTimePreset.duration,
+          totalTime: timerType.maxTime
+        }
+        dispatch({ type: TimerType.TimerActionEnum.SET, value: value })
+        setTimerPreset(newTimePreset)
+      }
+    }
+
+  }
 
   return (
     <Stack direction="column" alignItems="center" spacing={4}>
@@ -153,16 +199,22 @@ export const Timer = () => {
           label="Timer Selection"
           value={timerType.label}
           onChange={handleTimerSelect}
+          InputLabelProps={{
+            style: {
+              color: theme.palette.primary.main,
+              fontWeight: 600,
+              fontSize: 20,
+            }
+          }}
           sx={{
             width: '50%',
             alignSelf: 'start',
           }}
         >
-          {Object.entries(timerValues).map((timer, index) => {
-            const [_, timerValue] = timer
+          {Object.values(timerValues).map((timer, index) => {
             return (
-              <MenuItem value={timerValue.label} key={index}>
-                {timerValue.label}
+              <MenuItem value={timer.label} key={index}>
+                {timer.label}
               </MenuItem>
             )
           })}
@@ -171,8 +223,15 @@ export const Timer = () => {
           select
           variant="standard"
           label="Timer Presets"
-          value={''}
-          fullWidth
+          value={timerPreset.label}
+          onChange={handleTimerPresetSelect}
+          InputLabelProps={{
+            style: {
+              color: theme.palette.primary.main,
+              fontWeight: 600,
+              fontSize: 20,
+            }
+          }}
           sx={{
             display: timerType.presets.length > 0 ? 'inline-flex' : 'none',
             width: '50%',
@@ -191,8 +250,8 @@ export const Timer = () => {
         </TextField>
       </Stack>
       <TimerKnob
-        timerDuration={initialTimer.duration}
-        setTimerDuration={setTimerDuration}
+        timer={newTimer}
+        setTimerDrag={setTimerDrag}
         handleButton={handleButton}
       />
       <Typography variant="h2" sx={{ font: 'Space Mono' }}>
