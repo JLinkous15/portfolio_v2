@@ -3,7 +3,8 @@ export namespace TimerType {
     SET = 'set',
     START = 'start',
     RESET = 'reset',
-    OPTIMISTIC_START = 'optimistic start'
+    OPTIMISTIC_START = 'optimistic start',
+    PAUSE = 'pause'
   }
 
   export enum TimerEnum {

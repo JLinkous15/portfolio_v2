@@ -1,4 +1,4 @@
-import { MenuItem, Stack, TextField, Typography, useTheme } from '@mui/material'
+import { Button, MenuItem, Stack, TextField, Typography, useTheme } from '@mui/material'
 import { Reducer, useEffect, useReducer, useRef, useState } from 'react'
 import { TimerKnob } from './TimerKnob'
 import { TimerType } from './timerTypes'
@@ -108,13 +108,17 @@ const timerReducer = (
       }
       return state
     case TimerType.TimerActionEnum.RESET:
+      clearInterval(action.value)
       return initialTimer
     case TimerType.TimerActionEnum.OPTIMISTIC_START:
       return {...state, isCounting: true}
+    case TimerType.TimerActionEnum.PAUSE:
+      clearInterval(action.value)
+      return {...state, isCounting: false}
     case TimerType.TimerActionEnum.START:
-      const newDuration = state.duration - milliseconds
-      const newAngle = (newDuration * 360 / state.totalTime)
-      return { ...state, duration: newDuration, relativeAngle: newAngle, timer: timeParser(newDuration), isCounting: true }
+        const newDuration = state.duration - milliseconds
+        const newAngle = (newDuration * 360 / state.totalTime)
+        return { ...state, duration: newDuration, relativeAngle: newAngle, timer: timeParser(newDuration), isCounting: true }
     default:
       return state
   }
@@ -136,8 +140,6 @@ export const Timer = () => {
     TimerIntervalRef.current = undefined
   }
 
-  console.log(TimerIntervalRef.current)
-
   const setTimerDrag = (newTime: {
     duration: number,
     totalTime: number,
@@ -150,16 +152,17 @@ export const Timer = () => {
   }, [])
 
   const handleButton = () => {
-    if (TimerIntervalRef.current) {
-      dispatch({ type: TimerType.TimerActionEnum.RESET })
-      clearInterval(TimerIntervalRef.current)
-      TimerIntervalRef.current = undefined
-    } else {
+    if (!newTimer.isCounting && newTimer.duration > 0) {
       dispatch({type: TimerType.TimerActionEnum.OPTIMISTIC_START})
       const id = setInterval(() => {
           dispatch({ type: TimerType.TimerActionEnum.START })
       }, milliseconds)
       TimerIntervalRef.current = id
+    } else if (newTimer.isCounting && newTimer.duration > 0) {
+      dispatch({type: TimerType.TimerActionEnum.PAUSE, value: TimerIntervalRef.current})
+      TimerIntervalRef.current = undefined
+    } else {
+      return
     }
   }
 
@@ -192,11 +195,15 @@ export const Timer = () => {
         setTimerPreset(newTimePreset)
       }
     }
+  }
 
+  const handleClear = () => {
+          dispatch({ type: TimerType.TimerActionEnum.RESET, value: TimerIntervalRef.current })
+      TimerIntervalRef.current = undefined
   }
 
   return (
-    <Stack direction="column" alignItems="center" spacing={4}>
+    <Stack direction="column" alignItems="center" spacing={4} maxWidth={"700px"}>
       <Stack direction="row" spacing={2} width="100%">
         <TextField
           select
@@ -259,9 +266,22 @@ export const Timer = () => {
         setTimerDrag={setTimerDrag}
         handleButton={handleButton}
       />
-      <Typography variant="h2" sx={{ font: 'Space Mono' }}>
-        {newTimer.timer}
-      </Typography>
+      <Stack direction="column" alignItems={"center"} spacing={2}>
+        <Typography variant="h2" sx={{ font: 'Space Mono', paddingTop: 7 }}>
+          {newTimer.timer}
+        </Typography>
+        {(newTimer.duration > 999) && 
+          <Button variant="tactile" onClick={handleClear} sx={{position: 'absolute'}}>
+            Clear
+          </Button>
+        }
+        {timerType.body && 
+          <Typography variant="body1" sx={{ font: 'Space Mono', paddingTop: 2 }}>
+            {timerType.body}
+          </Typography>
+        }
+
+      </Stack>
     </Stack>
   )
 }

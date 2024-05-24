@@ -38,7 +38,7 @@ const ContentBox = styled(Box, {
   shouldForwardProp: (prop) => prop !== 'open',
 })<ContentBox>(({ theme, open }) => ({
   width: '100%',
-  minWidth: '500px',
+  minWidth: '400px',
   paddingLeft: measurements.navbarSize * 2,
   paddingTop: measurements.navbarSize,
   paddingRight: measurements.navbarSize,
@@ -62,7 +62,7 @@ export const Navbar = ({ children }: NavbarProps) => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (isUltrawide) setOpen(true)
+    setOpen(isUltrawide)
   }, [isUltrawide])
 
   const navigationLinks: NavLinkType = [
@@ -96,7 +96,7 @@ export const Navbar = ({ children }: NavbarProps) => {
   return (
     <BrowserBox>
       {!isMobile ? (
-        <NavDrawer navLinks={navigationLinks} />
+        <NavDrawer open={isUltrawide || open} navLinks={navigationLinks} />
       ) : (
         <NavbarAppBar navLinks={navigationLinks} />
       )}

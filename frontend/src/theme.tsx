@@ -6,7 +6,7 @@ import { createContext, useEffect, useMemo, useState } from 'react'
 
 export const measurements = {
   navbarSize: 60,
-  navbarAdd: 130,
+  navbarAdd: 150,
 }
 
 //palette options

@@ -1,6 +1,7 @@
 import AvTimerIcon from '@mui/icons-material/AvTimer'
 import ClearIcon from '@mui/icons-material/Clear'
 import FingerprintIcon from '@mui/icons-material/Fingerprint'
+import PauseIcon from '@mui/icons-material/Pause';
 import { Stack, styled } from '@mui/material'
 import { useRef, useState } from 'react'
 import { TactileIconButton } from '../../components/Common/TactileIconButton'
@@ -153,11 +154,14 @@ export const TimerKnob = ({
           height: `${knobHandSize}px`,
         }}
       >
-        {!timer.isCounting ? (
+        {!timer.isCounting && timer.duration >= 0 ? (
           <AvTimerIcon fontSize="large" />
-        ) : (
+        ) : timer.isCounting && timer.duration > 0 ? (
+          <PauseIcon fontSize="large" />
+        ) :  (
           <ClearIcon fontSize="large" />
-        )}
+        )
+      }
       </TactileIconButton>
     </TimerKnobHousing>
   )

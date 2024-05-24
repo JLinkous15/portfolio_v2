@@ -84,7 +84,7 @@ export const NavDrawer = ({navLinks, ...props}: NavDrawerProps) => {
             {navLinks.map((link, index) => (
               <ListItem key={index} onClick={link.onClick} disableGutters>
                 <IconButton
-                  sx={!open ? { width: '100%'} : {}}
+                  sx={!open ? { width: '100%'} : {marginLeft: 1.4}}
                 >
                   {link.icon}
                 </IconButton>
