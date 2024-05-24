@@ -154,12 +154,10 @@ export const TimerKnob = ({
           height: `${knobHandSize}px`,
         }}
       >
-        {!timer.isCounting && timer.duration >= 0 ? (
+        {!timer.isCounting || timer.duration === 0 ? (
           <AvTimerIcon fontSize="large" />
-        ) : timer.isCounting && timer.duration > 0 ? (
-          <PauseIcon fontSize="large" />
         ) :  (
-          <ClearIcon fontSize="large" />
+          <PauseIcon fontSize="large" />
         )
       }
       </TactileIconButton>

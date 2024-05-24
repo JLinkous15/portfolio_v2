@@ -199,6 +199,8 @@ export const Timer = () => {
 
   const handleClear = () => {
           dispatch({ type: TimerType.TimerActionEnum.RESET, value: TimerIntervalRef.current })
+          setTimerType(initialTimerType)
+          setTimerPreset(initialTimerPreset)
       TimerIntervalRef.current = undefined
   }
 
@@ -266,15 +268,15 @@ export const Timer = () => {
         setTimerDrag={setTimerDrag}
         handleButton={handleButton}
       />
-      <Stack direction="column" alignItems={"center"} spacing={2}>
-        <Typography variant="h2" sx={{ font: 'Space Mono', paddingTop: 7 }}>
-          {newTimer.timer}
-        </Typography>
-        {(newTimer.duration > 999) && 
-          <Button variant="tactile" onClick={handleClear} sx={{position: 'absolute'}}>
+      <Stack direction="column" alignItems={"center"} spacing={2} position={'relative'}>
+        {newTimer.duration > 999 && 
+          <Button variant="tactile" onClick={handleClear} sx={{position: 'absolute', top: 0}}>
             Clear
           </Button>
         }
+        <Typography variant="h2" sx={{ font: 'Space Mono', paddingTop: 7 }}>
+          {newTimer.timer}
+        </Typography>
         {timerType.body && 
           <Typography variant="body1" sx={{ font: 'Space Mono', paddingTop: 2 }}>
             {timerType.body}

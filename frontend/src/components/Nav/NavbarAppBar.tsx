@@ -19,8 +19,8 @@ interface NavAppBarProps extends AppBarProps {
 const StyledAppBar = styled(AppBar, {
   shouldForwardProp: (props) => props !== 'open',
 })(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'row',
+  display: "flex",
+  flexDirection: "row",
 
   '& .MuiPaper-root': {
     backgroundColor: theme.palette.background.default,
@@ -29,7 +29,8 @@ const StyledAppBar = styled(AppBar, {
   },
 }))
 
-export const NavbarAppBar = ({ navLinks }: NavAppBarProps) => {
+
+export const NavbarAppBar = ({navLinks}: NavAppBarProps) => {
   // const { open, setOpen } = useContext(NavbarContext)
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
   const menuOpen = Boolean(anchorEl)
@@ -41,52 +42,52 @@ export const NavbarAppBar = ({ navLinks }: NavAppBarProps) => {
   const handleClose = () => setAnchorEl(null)
 
   return (
-    <StyledAppBar>
-      {!menuOpen ? (
-        <Tooltip title="Menu">
-          <IconButton
-            aria-label="menu-button"
-            onClick={handleOpen}
-            color="primary"
-          >
-            <MenuIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Close">
-          <IconButton
-            aria-label="menu-button"
-            onClick={handleClose}
-            color="primary"
-          >
-            <CloseIcon />
-          </IconButton>
-        </Tooltip>
-      )}
-      <ColorModeSwitch />
-      <Menu
-        open={menuOpen}
-        onClose={handleClose}
-        onClick={handleClose}
-        anchorEl={anchorEl}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
-      >
-        <MenuList dense>
-          {navLinks.map((link, index) => (
-            <MenuItem onClick={link.onClick} key={index}>
-              <ListItemIcon>{link.icon}</ListItemIcon>
-              <ListItemText>{link.title}</ListItemText>
-            </MenuItem>
-          ))}
-        </MenuList>
-      </Menu>
-    </StyledAppBar>
-  )
+  <StyledAppBar>
+    {!menuOpen ? (
+      <Tooltip title="Menu">
+        <IconButton
+          aria-label="menu-button"
+          onClick={handleOpen}
+          color="primary"
+        >
+          <MenuIcon />
+        </IconButton>
+      </Tooltip>
+    ) : (
+      <Tooltip title="Close">
+        <IconButton
+          aria-label="menu-button"
+          onClick={handleClose}
+          color="primary"
+        >
+          <CloseIcon />
+        </IconButton>
+      </Tooltip>
+    )}
+    <ColorModeSwitch />
+    <Menu 
+    open={menuOpen} 
+    onClose={handleClose}
+    onClick={handleClose}
+    anchorEl={anchorEl} 
+    anchorOrigin={{
+      vertical: 'bottom',
+      horizontal: 'right',
+    }}
+    transformOrigin={{
+      vertical: 'top',
+      horizontal: 'right',
+    }}>
+      <MenuList dense>
+
+      {navLinks.map((link, index) => (
+        <MenuItem onClick={link.onClick} key={index}>
+          <ListItemIcon>{link.icon}</ListItemIcon>
+          <ListItemText>{link.title}</ListItemText>
+        </MenuItem>
+      ))}
+      </MenuList>
+    </Menu>
+</StyledAppBar>)
+
 }
