@@ -23,30 +23,30 @@ Back End:
 ## Installation
 
 ## [Install Homebrew](https://brew.sh/) \\
-## [Install nvm](https://formulae.brew.sh/formula/pyenv) \
+## [Install nvm](https://formulae.brew.sh/formula/pyenv) 
 &nbsp;&nbsp;&nbsp;&nbsp; $ brew install pyenv \\
-## [Install pyenv](https://formulae.brew.sh/formula/nvm) \
+## [Install pyenv](https://formulae.brew.sh/formula/nvm) 
 &nbsp;&nbsp;&nbsp;&nbsp; $ brew install nvm \\
-## [Install node v22.2.0](https://github.com/nvm-sh/nvm) \
-&nbsp;&nbsp;&nbsp;&nbsp; $ nvm install 22 \
-## [Install python v3.12.3](https://github.com/pyenv/pyenv) \
+## [Install node v22.2.0](https://github.com/nvm-sh/nvm) 
+&nbsp;&nbsp;&nbsp;&nbsp; $ nvm install 22 \\
+## [Install python v3.12.3](https://github.com/pyenv/pyenv) 
 &nbsp;&nbsp;&nbsp;&nbsp; $ pyenv install 3.12.3 \\
-## [Install yarn](https://www.npmjs.com/package/yarn)\
+## [Install yarn](https://www.npmjs.com/package/yarn)
 &nbsp;&nbsp;&nbsp;&nbsp; $ npm i yarn \\
-## Clone Repo \
-&nbsp;&nbsp;&nbsp;&nbsp; $ git clone <REPOSITORY HTTP> \
+## Clone Repo 
+&nbsp;&nbsp;&nbsp;&nbsp; $ git clone INSERT_REPO_HTTP 
 &nbsp;&nbsp;&nbsp;&nbsp; $ git cd portfolio_v2 \\
-## Create Virtual Environment \
-&nbsp;&nbsp;&nbsp;&nbsp; $ python3 -m venv <NAME OF YOUR ENVIRONMENT> \\
-## Install Yarn Dependencies \
-&nbsp;&nbsp;&nbsp;&nbsp; $ cd frontend \
+## Create Virtual Environment 
+&nbsp;&nbsp;&nbsp;&nbsp; $ python3 -m venv INSERT_ENV_NAME \\
+## Install Yarn Dependencies 
+&nbsp;&nbsp;&nbsp;&nbsp; $ cd frontend 
 &nbsp;&nbsp;&nbsp;&nbsp; $ yarn install \\
-## Install Backend Dependencies \
+## Install Backend Dependencies 
 &nbsp;&nbsp;&nbsp;&nbsp; $ pip install -r backend/requirements/requirements.txt \\
-## Open in VSCode \
+## Open in VSCode 
 &nbsp;&nbsp;&nbsp;&nbsp; Open the debugger and press play on both the backend and frontend. \\
-## Open on CMD \
-&nbsp;&nbsp;&nbsp;&nbsp; $cd frontend && yarn dev \
+## Open on CMD 
+&nbsp;&nbsp;&nbsp;&nbsp; $cd frontend && yarn dev 
 &nbsp;&nbsp;&nbsp;&nbsp; $cd backend && fastapi dev backend/src/main.py \\
 
 
